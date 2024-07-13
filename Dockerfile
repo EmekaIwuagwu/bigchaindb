@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     gcc \
     libssl-dev \
     libsodium-dev \
+    libffi-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
