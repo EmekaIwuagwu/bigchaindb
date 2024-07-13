@@ -14,10 +14,13 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Install PyNaCl from pre-built wheels
+RUN pip install --no-cache-dir PyNaCl
+
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install any needed packages specified in requirements.txt
+# Install any other needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Make port 9984 available to the world outside this container
@@ -26,5 +29,5 @@ EXPOSE 9984
 # Define environment variable
 ENV NAME World
 
-# Run BigchainDB server when the container launches
-CMD ["bigchaindb", "start"]
+# Run your application (replace with your actual command)
+CMD ["python", "app.py"]
