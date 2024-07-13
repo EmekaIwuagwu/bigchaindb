@@ -1,33 +1,27 @@
-# Use an official Python runtime as a parent image
+# Start from a base image
 FROM python:3.8-slim
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Install build dependencies
+# Copy requirements file
+COPY requirements.txt .
+
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
-    gcc \
-    libssl-dev \
     libsodium-dev \
-    libffi-dev \
-    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PyNaCl from pre-built wheels
-RUN pip install --no-cache-dir PyNaCl
-
-# Copy the current directory contents into the container at /app
-COPY . /app
-
-# Install any other needed packages specified in requirements.txt
+# Upgrade pip and install dependencies
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 9984 available to the world outside this container
+# Copy the rest of the application
+COPY . .
+
+# Expose port
 EXPOSE 9984
 
-# Define environment variable
-ENV NAME World
-
-# Run your application (replace with your actual command)
+# Command to run the application
 CMD ["python", "app.py"]
